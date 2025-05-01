@@ -12,18 +12,42 @@ def MED(S, T):
         return(len(T))
     elif (T == ""):
         return(len(S))
+    elif S[0] == T[0]:
+        return MED(S[1:], T[1:])
     else:
-        if (S[0] == T[0]):
-            return(MED(S[1:], T[1:]))
-        else:
-            return(1 + min(MED(S, T[1:]), MED(S[1:], T)))
+        insert = MED(S, T[1:])
+        delete = MED(S[1:], T)
+        substitute = MED(S[1:], T[1:])
+        return 1 + min(insert, delete, substitute)
+        ##else:
+        ##    return(1 + min(MED(S, T[1:]), MED(S[1:], T)))
+
+
 
 
 def fast_MED(S, T, MED={}):
     # TODO -  implement top-down memoization
-    pass
+    key = (S, T)
+    if key in MED:
+        return MED[key]
+
+    if S == "":
+        MED[key] = len(T)
+    elif T == "":
+        MED[key] = len(S)
+    elif S[0] == T[0]:
+        MED[key] = fast_MED(S[1:], T[1:], MED)
+    else:
+        insert = fast_MED(S, T[1:], MED)
+        delete = fast_MED(S[1:], T, MED)
+        substitute = fast_MED(S[1:], T[1:], MED)
+        MED[key] = 1 + min(insert, delete, substitute)
+
+    return MED[key]
+
 
 def fast_align_MED(S, T, MED={}):
-    # TODO - keep track of alignment
     pass
+
+
 
